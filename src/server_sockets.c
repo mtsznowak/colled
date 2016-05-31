@@ -13,15 +13,17 @@ char *checkForMessage(){
     for (int i=0; i<MAXCLIENTS; i++){
       if (clients[i].revents & POLLRDNORM){
         char *buffer = malloc(255);
-        recv(clients[i].fd, buffer, 255, 0);
-        return buffer;
+        if (recv(clients[i].fd, buffer, 255, 0) > 0)
+          return buffer;
+        else
+          deleteClient(i);
       }
     }
   }
   return NULL;
 }
 
-void colseSockets(){
+void closeSockets(){
   for (int i=0; i<MAXCLIENTS; i++)
     if (clients[i].fd != 0)
       close(clients[i].fd);
@@ -53,7 +55,18 @@ void initializePollFD(){
 
 void checkForNewClients(){
   if (poll(&isocket, 1, 20) != 0){
-      if (isocket.revents & POLLRDNORM)
+      if (isocket.revents & POLLRDNORM){
         clients[nextc++].fd = accept4(isocket.fd, (struct sockaddr *)&ad, &socksize, SOCK_NONBLOCK);
+        sendMessage("Hello!", nextc-1);
+      }
     }
 }
+
+void deleteClient(int i){
+  close(clients[i].fd);
+  clients[i].fd = clients[--nextc].fd;
+}
+
+void sendMessage(char *buffer, int i){
+  send(clients[i].fd, buffer, strlen(buffer), 0);
+};

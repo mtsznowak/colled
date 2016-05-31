@@ -10,11 +10,11 @@ int main(int argc, char **argv){
 
   initializeServerSocket(atoi(argv[2]));
   initializePollFD();
-  atexit(colseSockets);
+  atexit(closeSockets);
 
   while(1){
     checkForNewClients();
-    
+
     char *message = checkForMessage();
     if (message != NULL){
       printf("%s\n", message);

@@ -12,4 +12,7 @@ add_executable(colled_server
 
 add_executable(colled_client 
   src/client.c
+  inc/client.h
+  src/client_sockets.c
+  inc/client_sockets.h
 )

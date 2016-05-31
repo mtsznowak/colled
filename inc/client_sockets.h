@@ -8,12 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXCLIENTS 50
-
+void initializeClientSocket(char*, int);
+void sendMessage(char*);
 void closeSockets();
-void initializeServerSocket(int);
-void initializePollFD();
-void checkForNewClients();
 char *checkForMessage();
-void deleteClient(int);
-void sendMessage(char *, int);
