@@ -6,30 +6,13 @@ struct sockaddr_in ad;
 struct pollfd clients[MAXCLIENTS+1];
 int nextc = 1;
 
+int getClientsNumber(){
+  return nextc - 1;
+}
+
 void deleteClient(int i){
   close(clients[i].fd);
   clients[i].fd = clients[--nextc].fd;
-}
-
-char* listenForMessages(){
-  if (poll(clients, nextc, -1)>0){
-
-    if (clients[0].revents & POLLIN){
-      clients[nextc++].fd = accept4(clients[0].fd, (struct sockaddr *)&ad, &socksize, SOCK_NONBLOCK);
-      return NULL;
-    }
-
-    for (int i=1; i<nextc; i++){
-      if (clients[i].revents & POLLRDNORM){
-        char *buffer = malloc(255);
-        if (recv(clients[i].fd, buffer, 255, 0) > 0)
-          return buffer;
-        else
-          deleteClient(i);
-      }
-    }
-  }
-  return NULL;
 }
 
 void closeSockets(){
@@ -62,10 +45,28 @@ void initializePollFD(){
 }
 
 void sendMessage(char *buffer, int i){
-  send(clients[i].fd, buffer, strlen(buffer), 0);
+  char q = (char)strlen(buffer)+1;
+  send(clients[i].fd, &q, 1, 0);
+  if (q!=1)send(clients[i].fd, buffer, strlen(buffer), 0);
 };
 
-void sendMassageToAll(char *buffer){
-  for (int i=0; i<nextc; i++)
-    sendMessage(buffer, i);
+char* listenForMessages(){
+  if (poll(clients, nextc, -1)>0){
+
+    if (clients[0].revents & POLLIN){
+      clients[nextc++].fd = accept4(clients[0].fd, (struct sockaddr *)&ad, &socksize, SOCK_NONBLOCK);
+      return (char*)1;
+    }
+
+    for (int i=1; i<nextc; i++){
+      if (clients[i].revents & POLLRDNORM){
+        char *buffer = malloc(255);
+        if (recv(clients[i].fd, buffer, 255, 0) > 0)
+          return buffer;
+        else
+          deleteClient(i);
+      }
+    }
+  }
+  return NULL;
 }

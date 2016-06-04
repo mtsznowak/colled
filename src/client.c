@@ -5,8 +5,8 @@ void handle_input(){
 
 }
 
-void parse_message(){
-  
+void parse_message(char* message){
+  addLine(message);
 }
 
 int main(int argc, char **argv){
@@ -26,8 +26,7 @@ int main(int argc, char **argv){
   signal(SIGINT, closeSockets);
 
   while(1){
-    if (poll(fds, 2, -1) > 0){
-
+    if (poll(fds, 1, -1) > 0){
       if (fds[0].revents & POLLIN){
         char *message;
         message = getMessage();

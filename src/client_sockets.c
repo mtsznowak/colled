@@ -4,9 +4,18 @@ int csocket;
 struct sockaddr *address;
 
 char *getMessage(){
-  char *buffer = malloc(256);
-  if (recv(csocket, buffer, 255, 0) > 0)
+  char r = 0;
+  recv(csocket, &r, 1, 0);
+  char *buffer = malloc(r+2);
+  r--;
+  if (r == 0){
+    buffer[0] = 0;
     return buffer;
+  }
+  if ((recv(csocket, buffer, (int)r, 0)) > 0){
+    buffer[(int)r] = 0;
+    return buffer;
+  }
   return NULL;
 }
 

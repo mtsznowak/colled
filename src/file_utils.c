@@ -2,12 +2,21 @@
 
 FILE* fd;
 char **content;
+int allocated = 0;
 int lines;
 
 int count_lines(){
   int lines = 0;
   while (EOF != (fscanf(fd, "%*[^\n]"), fscanf(fd, "%*c"))) 
     ++lines;
+  return lines;
+}
+
+char *getLine(int i){
+  return content[i];
+}
+
+int getLinesCount(){
   return lines;
 }
 

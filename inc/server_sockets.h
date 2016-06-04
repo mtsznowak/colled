@@ -16,3 +16,4 @@ void initializePollFD();
 void sendMessage(char *, int);
 void sendMassageToAll(char *);
 char* listenForMessages();
+int getClientsNumber();

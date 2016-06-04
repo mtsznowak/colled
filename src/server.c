@@ -20,7 +20,15 @@ int main(int argc, char **argv){
   
   while(1){
     char* message = listenForMessages();
-    if (message != NULL){}
+    if (message > (char*)1){
+      printf("message\n");
+    }else if (message == (char*)1){
+      printf("new client\n");
+      int ind = getClientsNumber();
+      for (int i=0; i<getLinesCount(); i++)
+        sendMessage(getLine(i),ind);
+    }
+    fflush(stdout);
   }
 
   return 0;
