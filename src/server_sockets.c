@@ -3,14 +3,23 @@
 socklen_t socksize = sizeof(struct sockaddr_in);
 struct sockaddr_in ad;
 
-struct pollfd isocket;
-struct pollfd clients[MAXCLIENTS];
-int nextc = 0;
+struct pollfd clients[MAXCLIENTS+1];
+int nextc = 1;
 
+void deleteClient(int i){
+  close(clients[i].fd);
+  clients[i].fd = clients[--nextc].fd;
+}
 
-char *checkForMessage(){
-  if (poll(clients, nextc, 1000)>0){
-    for (int i=0; i<MAXCLIENTS; i++){
+char* listenForMessages(){
+  if (poll(clients, nextc, -1)>0){
+
+    if (clients[0].revents & POLLIN){
+      clients[nextc++].fd = accept4(clients[0].fd, (struct sockaddr *)&ad, &socksize, SOCK_NONBLOCK);
+      return NULL;
+    }
+
+    for (int i=1; i<nextc; i++){
       if (clients[i].revents & POLLRDNORM){
         char *buffer = malloc(255);
         if (recv(clients[i].fd, buffer, 255, 0) > 0)
@@ -24,14 +33,13 @@ char *checkForMessage(){
 }
 
 void closeSockets(){
-  for (int i=0; i<MAXCLIENTS; i++)
+  for (int i=0; i<MAXCLIENTS+1; i++)
     if (clients[i].fd != 0)
       close(clients[i].fd);
-  close(isocket.fd);
 }
 
 void initializeServerSocket(int port){
-  if ((isocket.fd = socket(PF_INET, SOCK_STREAM, 0))<0) 
+  if ((clients[0].fd = socket(PF_INET, SOCK_STREAM, 0))<0) 
     perror("socket");
 
   struct sockaddr_in addr;
@@ -39,33 +47,18 @@ void initializeServerSocket(int port){
   addr.sin_addr.s_addr = INADDR_ANY;
   addr.sin_port = htons(port);
 
-  if (bind(isocket.fd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) < 0)
+  if (bind(clients[0].fd, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) < 0)
     perror("bind");
-  listen(isocket.fd, 0);
+  listen(clients[0].fd, 0);
 
-  isocket.events = POLLRDNORM;
+  clients[0].events = POLLIN;
 }
 
 void initializePollFD(){
-  for (int i=0; i<MAXCLIENTS; i++){
+  for (int i=1; i<MAXCLIENTS+1; i++){
     clients[i].fd = 0;
-    clients[i].events = POLLRDNORM;
+    clients[i].events = POLLIN;
   }
-}
-
-int checkForNewClients(){
-  if (poll(&isocket, 1, 20) != 0){
-      if (isocket.revents & POLLRDNORM){
-        clients[nextc++].fd = accept4(isocket.fd, (struct sockaddr *)&ad, &socksize, SOCK_NONBLOCK);
-        return nextc-1;
-      }
-    }
-  return -1;
-}
-
-void deleteClient(int i){
-  close(clients[i].fd);
-  clients[i].fd = clients[--nextc].fd;
 }
 
 void sendMessage(char *buffer, int i){

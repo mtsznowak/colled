@@ -19,14 +19,8 @@ int main(int argc, char **argv){
   signal(SIGINT, oexit);
   
   while(1){
-    int q;
-    if ((q = checkForNewClients())!= -1)
-      {}//sendMessage(file, q);
-
-    char *message = checkForMessage();
-    if (message != NULL){
-      printf("%s\n", message);
-    }
+    char* message = listenForMessages();
+    if (message != NULL){}
   }
 
   return 0;
