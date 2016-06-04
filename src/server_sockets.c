@@ -53,13 +53,14 @@ void initializePollFD(){
   }
 }
 
-void checkForNewClients(){
+int checkForNewClients(){
   if (poll(&isocket, 1, 20) != 0){
       if (isocket.revents & POLLRDNORM){
         clients[nextc++].fd = accept4(isocket.fd, (struct sockaddr *)&ad, &socksize, SOCK_NONBLOCK);
-        sendMessage("Hello!", nextc-1);
+        return nextc-1;
       }
     }
+  return -1;
 }
 
 void deleteClient(int i){

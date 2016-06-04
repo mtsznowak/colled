@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 
 
   while(1){
-    char *message = checkForMessage();
+    char *message = checkForMessage(1000);
     if (message != NULL) 
       printf("%s\n", message);
   }

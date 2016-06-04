@@ -13,7 +13,7 @@
 void closeSockets();
 void initializeServerSocket(int);
 void initializePollFD();
-void checkForNewClients();
+int checkForNewClients();
 char *checkForMessage();
 void deleteClient(int);
 void sendMessage(char *, int);

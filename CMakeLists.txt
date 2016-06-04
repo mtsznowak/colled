@@ -8,6 +8,8 @@ add_executable(colled_server
   inc/server.h
   src/server_sockets.c
   inc/server_sockets.h
+  src/file_utils.c
+  inc/file_utils.h
 )
 
 add_executable(colled_client 

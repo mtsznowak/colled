@@ -11,4 +11,4 @@
 void initializeClientSocket(char*, int);
 void sendMessage(char*);
 void closeSockets();
-char *checkForMessage();
+char *checkForMessage(int len);

@@ -3,10 +3,10 @@
 struct pollfd csocket;
 struct sockaddr *address;
 
-char *checkForMessage(){
+char *checkForMessage(int len){
   if (poll(&csocket, 1, 1000)>0){
-    char *buffer = malloc(255);
-    if (recv(csocket.fd, buffer, 255, 0) > 0)
+    char *buffer = malloc(len+1);
+    if (recv(csocket.fd, buffer, len, 0) > 0)
       return buffer;
   }
   return NULL;
