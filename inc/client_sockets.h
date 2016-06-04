@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void initializeClientSocket(char*, int);
+int initializeClientSocket(char*, int);
 void sendMessage(char*);
 void closeSockets();
-char *checkForMessage(int len);
+char *getMessage();

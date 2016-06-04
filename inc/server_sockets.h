@@ -17,3 +17,4 @@ int checkForNewClients();
 char *checkForMessage();
 void deleteClient(int);
 void sendMessage(char *, int);
+void sendMassageToAll(char *);

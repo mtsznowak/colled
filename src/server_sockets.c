@@ -71,3 +71,8 @@ void deleteClient(int i){
 void sendMessage(char *buffer, int i){
   send(clients[i].fd, buffer, strlen(buffer), 0);
 };
+
+void sendMassageToAll(char *buffer){
+  for (int i=0; i<nextc; i++)
+    sendMessage(buffer, i);
+}
