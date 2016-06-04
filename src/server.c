@@ -4,7 +4,7 @@
 
 void oexit(){
   closeSockets();
-  save_close_file();
+  saveCloseFile();
   exit(0);
 }
 
@@ -13,7 +13,7 @@ int main(int argc, char **argv){
     printf("Usage: ./colled_server file_path port\n");
     exit(1);
   }
-  initialize_file_access(argv[1]);
+  initializeFileAccess(argv[1]);
   initializeServerSocket(atoi(argv[2]));
   initializePollFD();
   signal(SIGINT, oexit);

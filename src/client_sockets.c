@@ -37,4 +37,5 @@ void sendMessage(char *buffer){
 
 void closeSockets(){
   close(csocket);
+  exit(0);
 }

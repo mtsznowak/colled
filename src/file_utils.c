@@ -11,13 +11,13 @@ int count_lines(){
   return lines;
 }
 
-void set_line(int ind, char* buf){
+void setLine(int ind, char* buf){
   free(content[ind]);
   content[ind] = calloc(sizeof(buf)+1, sizeof(char));
   strcpy(content[ind], buf);
 }
 
-void initialize_file_access(char *path){
+void initializeFileAccess(char *path){
   fd = fopen(path, "r+");
 
   if (fd == NULL){
@@ -46,7 +46,7 @@ void initialize_file_access(char *path){
   }
 }
 
-void update_file(){
+void updateFile(){
   rewind(fd);
   int size = 0;
   for (int i=0; i<lines; i++){
@@ -57,8 +57,8 @@ void update_file(){
   ftruncate(fileno(fd), size);
 }
 
-void save_close_file(){
-  update_file();
+void saveCloseFile(){
+  updateFile();
   fclose(fd);
 
   for (int i=0; i < lines; i++)

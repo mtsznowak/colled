@@ -2,6 +2,10 @@
 #include "client_sockets.h"
 
 void handle_input(){
+
+}
+
+void parse_message(){
   
 }
 
@@ -19,7 +23,7 @@ int main(int argc, char **argv){
   fds[1].fd = 0;
   fds[1].events = POLLIN;
 
-  atexit(closeSockets);
+  signal(SIGINT, closeSockets);
 
   while(1){
     if (poll(fds, 2, -1) > 0){
@@ -31,6 +35,8 @@ int main(int argc, char **argv){
           printf("Error. Exiting.\n");
           exit(1);
         }
+        parse_message(message);
+        free(message);
       }
 
       if (fds[1].revents & POLLIN)
