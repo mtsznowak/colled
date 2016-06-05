@@ -22,8 +22,7 @@ int getLinesCount(){
 
 void setLine(int ind, char* buf){
   free(content[ind]);
-  content[ind] = calloc(sizeof(buf)+1, sizeof(char));
-  strcpy(content[ind], buf);
+  content[ind] = buf;
 }
 
 void initializeFileAccess(char *path){

@@ -9,23 +9,20 @@ void oexit(){
 }
 
 void normalCharacter(char c, int y, int x){
+  printf("%c, %d, %d\n",c,y,x);
   char *content = getLine(y);
   int linelen = strlen(content);
-  content = realloc(content, linelen + 2);
-  if (x < linelen){
-    for (int i=linelen+1; i>x; i--)
-      content[i] = content[i-1];
-    content[x] = c;
-  }else{
-    content[linelen] = c;
-    content[linelen+1] = '\0';
-  }
-  char* buff = malloc(linelen+3);
-  strcpy(buff+2, content);
+  char *newline = malloc(linelen + 3);
+  strncpy(newline, content, x);
+  newline[x] = c;
+  strcpy(newline+(x+1), content+x);
+  char* buff = malloc(linelen+4);
+  strcpy(buff+2, newline);
   buff[0] = 4;
-  buff[1] = y;
+  buff[1] = y+1;
   sendToAll(buff);
   free(buff);
+  setLine(y,newline);
 }
 
 void onPress(char c, int y, int x){
@@ -35,7 +32,7 @@ void onPress(char c, int y, int x){
     case('Y'): //backspace
       break;
     default:
-      normalCharacter(c,y,x);
+      normalCharacter(c,y-1,x-1);
       break;
   }
 }
@@ -54,6 +51,7 @@ int main(int argc, char **argv){
     char* message = listenForMessages();
     if (message > (char*)1){
       onPress(message[0], (int)message[1], (int)message[2]);
+      free(message);
     }else if (message == (char*)1){
       printf("new client\n");
       int ind = getClientsNumber();
@@ -66,7 +64,6 @@ int main(int argc, char **argv){
         free(buff);
       }
     }
-    fflush(stdout);
   }
 
   return 0;

@@ -28,7 +28,7 @@ void handle_input(){
       moveCursor(0,-1);
       break;
     default:
-      sendMessage(c, getY(), getX());
+      sendMessage(c, getY()+1, getX()+1);
       moveCursor(0,1);
       break;
   }
@@ -38,7 +38,7 @@ void parse_message(char* message){
   if (message[0] == 2)
     addLine(message+1);
   if (message[0] == 4)
-    setLine((int)message[1], message+2);
+    setLine((int)message[1]-1, message+2);
 }
 
 int main(int argc, char **argv){
