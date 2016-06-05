@@ -8,3 +8,4 @@ char* getLine(int);
 char* setLine(int, char*);
 void curses_init();
 void printBuff();
+void moveCursor(int, int);

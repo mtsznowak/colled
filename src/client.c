@@ -13,7 +13,20 @@ void initTermios(int echo) {
 
 
 void handle_input(){
-  printf("%d\n",getchar());
+  switch(getchar()){
+    case(56):
+      moveCursor(-1,0);
+      break;
+    case(50):
+      moveCursor(1,0);
+      break;
+    case(54):
+      moveCursor(0,1);
+      break;
+    case(52):
+      moveCursor(0,-1);
+      break;
+  }
 }
 
 void parse_message(char* message){

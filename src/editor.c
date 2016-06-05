@@ -4,8 +4,8 @@ char **content;
 int allocated = 0;
 int lines = 0;
 int lowerbound = 0;
-int x=0;
-int y=0;
+int x=3;
+int y=3;
 
 void curses_init(){
   initscr();
@@ -33,6 +33,13 @@ void printBuff()
     clrtoeol();
     lc++;
   }
-  move(5, 5);
+  move(y, x);
+  refresh();
+}
+
+void moveCursor(int a, int b){
+  y+=a;
+  x+=b;
+  move(y, x);
   refresh();
 }
