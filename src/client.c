@@ -1,8 +1,19 @@
 #include "client.h"
 #include "client_sockets.h"
+#include "editor.h"
+
+static struct termios old, new;
+void initTermios(int echo) {
+  tcgetattr(0, &old); /* grab old terminal i/o settings */
+  new = old; /* make new settings same as old settings */
+  new.c_lflag &= ~ICANON; /* disable buffered i/o */
+  new.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
+  tcsetattr(0, TCSANOW, &new); /* use these new terminal i/o settings now */
+}
+
 
 void handle_input(){
-
+  printf("%d\n",getchar());
 }
 
 void parse_message(char* message){
@@ -25,8 +36,10 @@ int main(int argc, char **argv){
 
   signal(SIGINT, closeSockets);
 
+  initTermios(0);
+  curses_init();
   while(1){
-    if (poll(fds, 1, -1) > 0){
+    if (poll(fds, 2, -1) > 0){
       if (fds[0].revents & POLLIN){
         char *message;
         message = getMessage();
@@ -41,6 +54,7 @@ int main(int argc, char **argv){
       if (fds[1].revents & POLLIN)
         handle_input();
     }
+    printBuff();
   }
   return 0;
 

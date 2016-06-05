@@ -17,4 +17,6 @@ add_executable(colled_client
   inc/client.h
   src/client_sockets.c
   inc/client_sockets.h
+  inc/editor.h
+  src/editor.c
 )

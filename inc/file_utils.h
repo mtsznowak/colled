@@ -10,4 +10,3 @@ void updateFile();
 int getLinesCount();
 void setLine(int, char*);
 char *getLine(int);
-void addLine(char*);
