@@ -13,7 +13,8 @@ void initTermios(int echo) {
 
 
 void handle_input(){
-  switch(getchar()){
+  char c;
+  switch(c=getchar()){
     case(56):
       moveCursor(-1,0);
       break;
@@ -26,11 +27,18 @@ void handle_input(){
     case(52):
       moveCursor(0,-1);
       break;
+    default:
+      sendMessage(c, getY(), getX());
+      moveCursor(0,1);
+      break;
   }
 }
 
 void parse_message(char* message){
-  addLine(message);
+  if (message[0] == 2)
+    addLine(message+1);
+  if (message[0] == 4)
+    setLine((int)message[1], message+2);
 }
 
 int main(int argc, char **argv){

@@ -50,6 +50,11 @@ void sendMessage(char *buffer, int i){
   if (q!=1)send(clients[i].fd, buffer, strlen(buffer), 0);
 };
 
+void sendToAll(char* buffer){
+  for (int i=1; i<nextc; i++)
+    sendMessage(buffer, i);
+}
+
 char* listenForMessages(){
   if (poll(clients, nextc, -1)>0){
 
@@ -59,9 +64,9 @@ char* listenForMessages(){
     }
 
     for (int i=1; i<nextc; i++){
-      if (clients[i].revents & POLLRDNORM){
-        char *buffer = malloc(255);
-        if (recv(clients[i].fd, buffer, 255, 0) > 0)
+      if (clients[i].revents & POLLIN){
+        char *buffer = malloc(3);
+        if (recv(clients[i].fd, buffer, 3, 0) > 0)
           return buffer;
         else
           deleteClient(i);

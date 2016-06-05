@@ -9,6 +9,6 @@
 #include <string.h>
 
 int initializeClientSocket(char*, int);
-void sendMessage(char*);
+void sendMessage(char c, int y, int x);
 void closeSockets();
 char *getMessage();

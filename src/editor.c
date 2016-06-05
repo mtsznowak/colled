@@ -7,6 +7,11 @@ int lowerbound = 0;
 int x=3;
 int y=3;
 
+void setLine(int i, char* line){
+  content[i] = realloc(content[i], strlen(line)+1);
+  strcpy(content[i], line);
+}
+
 void curses_init(){
   initscr();
   noecho();
@@ -43,3 +48,12 @@ void moveCursor(int a, int b){
   move(y, x);
   refresh();
 }
+
+int getX(){
+  return x;
+}
+
+int getY(){
+  return y;
+}
+

@@ -40,8 +40,13 @@ int initializeClientSocket(char* ip, int port){
   return csocket;
 }
 
-void sendMessage(char *buffer){
-  send(csocket, buffer, strlen(buffer), 0);
+void sendMessage(char c, int y, int x){
+  char buffer[3];
+  buffer[0] = c;
+  buffer[1] = (char)y;
+  buffer[2] = (char)x;
+  if (send(csocket, buffer, 3, 0) < 0)
+    perror("send");
 }
 
 void closeSockets(){

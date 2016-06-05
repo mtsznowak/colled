@@ -5,7 +5,9 @@
 
 void addLine(char*);
 char* getLine(int);
-char* setLine(int, char*);
+void setLine(int, char*);
 void curses_init();
 void printBuff();
 void moveCursor(int, int);
+int getX();
+int getY();
